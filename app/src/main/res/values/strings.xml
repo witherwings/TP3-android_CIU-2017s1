@@ -4,4 +4,16 @@
     <string name="resolver_misterio">Resolver misterio</string>
     <string name="mapamundi">Mapamundi</string>
     <string name="files">Files</string>
+    <string name="emitir_orden_contra">Emitir orden contra:</string>
+    <string name="orden_de_arresto">Orden de arresto</string>
+    <string name="orden_de_arresto_contra">Orden de arresto contra:</string>
+    <string name="emitir_orden">Emitir orden</string>
+    <string name="viajar">Viajar</string>
+    <string name="pedir_pista">Pedir pista</string>
+
+    <string-array name="villains_array">
+        <item>Carmen San Diego</item>
+        <item>Igor Igorvich</item>
+        <item>Vic La Mancha</item>
+    </string-array>
 </resources>
