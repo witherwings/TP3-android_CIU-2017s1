@@ -35,5 +35,6 @@ public class GameActivity extends AppCompatActivity {
 
     public void buttonEmitirOrdenOnClick(View view) {
         setContentView(R.layout.layout_arrest_order);
+        pupulateSpinner();
     }
 }
