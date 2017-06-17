@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">CarmenSanDiego</string>
+    <string name="que_vamos_a_hacer_ahora_detective">Que vamos a hacer ahora detective?</string>
+    <string name="resolver_misterio">Resolver misterio</string>
+    <string name="mapamundi">Mapamundi</string>
+    <string name="files">Files</string>
+</resources>
