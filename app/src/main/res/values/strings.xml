@@ -10,6 +10,7 @@
     <string name="emitir_orden">Emitir orden</string>
     <string name="viajar">Viajar</string>
     <string name="pedir_pista">Pedir pista</string>
+    <string name="destinos_recorridos">Destinos recorridos</string>
 
     <string-array name="villains_array">
         <item>Carmen San Diego</item>
