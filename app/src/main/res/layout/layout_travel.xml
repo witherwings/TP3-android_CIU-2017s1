@@ -9,20 +9,15 @@
         android:text="@string/viajar"
         android:textSize="20sp"/>
 
-    <Button
+    <Spinner
+        android:id="@+id/spinnerConnections"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Espania"/>
+        android:layout_height="wrap_content" />
 
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Francia"/>
-
-    <Button
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Alemania"/>
+        android:text="Viajar"/>
 
     <TextView
         android:layout_width="wrap_content"

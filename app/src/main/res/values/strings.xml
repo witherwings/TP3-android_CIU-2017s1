@@ -17,4 +17,10 @@
         <item>Igor Igorvich</item>
         <item>Vic La Mancha</item>
     </string-array>
+
+    <string-array name="connections_array">
+        <item>Alemania</item>
+        <item>Espania</item>
+        <item>Italia</item>
+    </string-array>
 </resources>
