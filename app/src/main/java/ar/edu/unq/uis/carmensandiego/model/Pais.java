@@ -6,36 +6,13 @@ import java.util.List;
  * Created by lucasf on 6/21/17.
  */
 
-public class Pais {
+public class Pais extends PaisSinFeatures {
 
-    int id;
-    String name;
     List<String> features;
-    List<MiniObject> connectedCountries;
-    List<String> places;
 
     public Pais(int id, String name, List<String> features, List<MiniObject> connectedCountries, List<String> places) {
-        this.id = id;
-        this.name = name;
+        super(id, name, connectedCountries, places);
         this.features = features;
-        this.connectedCountries = connectedCountries;
-        this.places = places;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     public List<String> getFeatures() {
@@ -44,21 +21,5 @@ public class Pais {
 
     public void setFeatures(List<String> features) {
         this.features = features;
-    }
-
-    public List<MiniObject> getConnectedCountries() {
-        return connectedCountries;
-    }
-
-    public void setConnectedCountries(List<MiniObject> connectedCountries) {
-        this.connectedCountries = connectedCountries;
-    }
-
-    public List<String> getPlaces() {
-        return places;
-    }
-
-    public void setPlaces(List<String> places) {
-        this.places = places;
     }
 }

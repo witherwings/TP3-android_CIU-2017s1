@@ -1,6 +1,7 @@
 package ar.edu.unq.uis.carmensandiego.httpService;
 
-import retrofit.RestAdapter;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
  * Created by lucasf on 6/21/17.
@@ -8,10 +9,14 @@ import retrofit.RestAdapter;
 
 public class ServiceConnection {
 
-    public CarmenService createService() {
+    public static CarmenService CreateService() {
         String IP = "192.168.1.108";
         String API_URL = "http://"+ IP +":9000";
-        RestAdapter restAdapter = new RestAdapter.Builder().setEndpoint(API_URL).build();
+        //Retrofit restAdapter = new Retrofit.Builder().setEndpoint(API_URL).build();
+        Retrofit restAdapter = new Retrofit.Builder()
+                .baseUrl(API_URL)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
         return restAdapter.create(CarmenService.class);
     }
 

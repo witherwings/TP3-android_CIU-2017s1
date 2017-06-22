@@ -2,10 +2,13 @@ package ar.edu.unq.uis.carmensandiego.httpService;
 
 import java.util.List;
 
+import ar.edu.unq.uis.carmensandiego.model.Game;
 import ar.edu.unq.uis.carmensandiego.model.Pais;
 import ar.edu.unq.uis.carmensandiego.model.Villano;
-import retrofit.Callback;
-import retrofit.http.GET;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.http.GET;
+import retrofit2.http.POST;
 
 /**
  * Created by lucasf on 6/21/17.
@@ -16,17 +19,21 @@ public interface CarmenService {
     /* VILLANOS! */
 
     @GET("/villanos")
-    void getVillanos(Callback<List<Villano>> callback);
+    Call<List<Pais>> getVillanos();
 
     @GET("/villanos/{VillanoId}")
-    void getVillanoById(@retrofit.http.Path("VillanoId") String id, Callback<Villano> callback);
+    void getVillanoById(@retrofit2.http.Path("VillanoId") String id, Callback<Villano> callback);
 
     /* PAISES! */
 
     @GET("/paises")
-    void getPaises(Callback<List<Pais>> callback);
+    Call<List<Pais>> getPaises();
 
-    @GET("/paises/{PaisID}")
-    void getPaisById(@retrofit.http.Path("PaisId") String id, Callback<Pais> callback);
+    @GET("/paises/{PaisId}")
+    void getPaisById(@retrofit2.http.Path("PaisId") String id, Callback<Pais> callback);
 
+    /* GAME! */
+
+    @POST("/iniciarJuego")
+    Call<Game> startGame(Callback<Game> callback);
 }

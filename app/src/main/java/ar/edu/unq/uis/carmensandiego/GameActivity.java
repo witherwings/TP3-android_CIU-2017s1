@@ -15,15 +15,17 @@ import java.util.List;
 
 import ar.edu.unq.uis.carmensandiego.httpService.CarmenService;
 import ar.edu.unq.uis.carmensandiego.httpService.ServiceConnection;
+import ar.edu.unq.uis.carmensandiego.model.Game;
 import ar.edu.unq.uis.carmensandiego.model.Pais;
 import ar.edu.unq.uis.carmensandiego.model.Villano;
-import retrofit.Callback;
-import retrofit.RetrofitError;
-import retrofit.client.Response;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class GameActivity extends AppCompatActivity {
 
     private CarmenService service;
+    private Game game;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,19 +33,38 @@ public class GameActivity extends AppCompatActivity {
         setContentView(R.layout.layout_arrest_order);
         setTitle("Estas en: Egipto!");
 
-        service = new ServiceConnection().createService();
+        service = ServiceConnection.CreateService();
 
         populateVillainsSpinner();
     }
 
     private void populateConnectionsSpinner() {
-        final GameActivity that = this;
-        service.getPaises(new Callback<List<Pais>>() {
+//        final GameActivity that = this;
+//        service.getPaises(new Callback<List<Pais>>() {
+//
+//            @Override
+//            public void success(List<Pais> paises, Response response) {
+//                List<String> paisesNombre = new ArrayList<String>();
+//                for (Pais p : paises) {
+//                    // TODO: agregar un if para solo meter las conexiones con el pais actual
+//                    paisesNombre.add(p.getName());
+//                }
+//                populateSpinner(R.id.spinnerConnections, new ArrayAdapter(that, android.R.layout.simple_spinner_item, paisesNombre));
+//            }
+//
+//            @Override
+//            public void failure(RetrofitError error) {
+//                // TODO: mostrar algo lindo
+//            }
+//        });
 
+        final GameActivity that = this;
+
+        service.getPaises().enqueue(new Callback<List<Pais>>() {
             @Override
-            public void success(List<Pais> paises, Response response) {
+            public void onResponse(Call<List<Pais>> call, Response<List<Pais>> response) {
                 List<String> paisesNombre = new ArrayList<String>();
-                for (Pais p : paises) {
+                for (Pais p : response.body()) {
                     // TODO: agregar un if para solo meter las conexiones con el pais actual
                     paisesNombre.add(p.getName());
                 }
@@ -51,30 +72,30 @@ public class GameActivity extends AppCompatActivity {
             }
 
             @Override
-            public void failure(RetrofitError error) {
-                // TODO: mostrar algo lindo
+            public void onFailure(Call<List<Pais>> call, Throwable t) {
+
             }
         });
     }
 
     private void populateVillainsSpinner() {
-        final GameActivity that = this;
-        service.getVillanos(new Callback<List<Villano>>() {
-
-            @Override
-            public void success(List<Villano> villanos, Response response) {
-                List<String> villanosNombre = new ArrayList<String>();
-                for (Villano v : villanos) {
-                    villanosNombre.add(v.getName());
-                }
-                populateSpinner(R.id.spinnerVillains, new ArrayAdapter(that, android.R.layout.simple_spinner_item, villanosNombre));
-            }
-
-            @Override
-            public void failure(RetrofitError error) {
-                // TODO: mostrar algo lindo
-            }
-        });
+//        final GameActivity that = this;
+//        service.getVillanos(new Callback<List<Villano>>() {
+//
+//            @Override
+//            public void success(List<Villano> villanos, Response response) {
+//                List<String> villanosNombre = new ArrayList<String>();
+//                for (Villano v : villanos) {
+//                    villanosNombre.add(v.getName());
+//                }
+//                populateSpinner(R.id.spinnerVillains, new ArrayAdapter(that, android.R.layout.simple_spinner_item, villanosNombre));
+//            }
+//
+//            @Override
+//            public void failure(RetrofitError error) {
+//                // TODO: mostrar algo lindo
+//            }
+//        });
     }
 
     private void populateSpinner(int spinnerId, ArrayAdapter adapter) {
