@@ -35,5 +35,5 @@ public interface CarmenService {
     /* GAME! */
 
     @POST("/iniciarJuego")
-    Call<Game> startGame(Callback<Game> callback);
+    Call<Game> startGame();
 }

@@ -36,6 +36,23 @@ public class GameActivity extends AppCompatActivity {
         service = ServiceConnection.CreateService();
 
         populateVillainsSpinner();
+        startGame();
+    }
+
+    private void startGame() {
+        final GameActivity that = this;
+
+        service.startGame().enqueue(new Callback<Game>() {
+            @Override
+            public void onResponse(Call<Game> call, Response<Game> response) {
+                that.game = response.body();
+            }
+
+            @Override
+            public void onFailure(Call<Game> call, Throwable t) {
+                // TODO: manejar error
+            }
+        });
     }
 
     private void populateConnectionsSpinner() {
