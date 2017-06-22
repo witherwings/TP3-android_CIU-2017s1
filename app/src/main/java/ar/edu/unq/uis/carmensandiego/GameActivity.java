@@ -18,6 +18,7 @@ import ar.edu.unq.uis.carmensandiego.httpService.ServiceConnection;
 import ar.edu.unq.uis.carmensandiego.model.Game;
 import ar.edu.unq.uis.carmensandiego.model.MiniObject;
 import ar.edu.unq.uis.carmensandiego.model.Pais;
+import ar.edu.unq.uis.carmensandiego.model.TravelCountry;
 import ar.edu.unq.uis.carmensandiego.model.Villano;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -154,5 +155,37 @@ public class GameActivity extends AppCompatActivity {
     public void buttonEmitirOrdenOnClick(View view) {
         setContentView(R.layout.layout_arrest_order);
         populateVillainsSpinner();
+    }
+
+    /**
+     * hace que el servidor viaje al pais seleccionado en el spinnerConnections
+     */
+    public void buttonTravelOnClick(View view) {
+        Spinner spinner = (Spinner) findViewById(R.id.spinnerConnections);
+        int destinationId = 0;
+
+        for (MiniObject mo : game.getPais().getConnectedCountries()) {
+            if (spinner.getSelectedItem().equals(mo.getName())) {
+                destinationId = mo.getId();
+                break;
+            }
+        }
+
+        TravelCountry destination = new TravelCountry(destinationId, game.getId());
+
+        final GameActivity that = this;
+        service.travel(destination).enqueue(new Callback<Game>() {
+            @Override
+            public void onResponse(Call<Game> call, Response<Game> response) {
+                that.game = response.body();
+                that.setTitle("Estas en: " + that.game.getPais().getName() + "!");
+                populateConnectionsSpinner();
+            }
+
+            @Override
+            public void onFailure(Call<Game> call, Throwable t) {
+                // TODO: mostrar algo lindo
+            }
+        });
     }
 }

@@ -4,9 +4,11 @@ import java.util.List;
 
 import ar.edu.unq.uis.carmensandiego.model.Game;
 import ar.edu.unq.uis.carmensandiego.model.Pais;
+import ar.edu.unq.uis.carmensandiego.model.TravelCountry;
 import ar.edu.unq.uis.carmensandiego.model.Villano;
 import retrofit2.Call;
 import retrofit2.Callback;
+import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
 
@@ -36,4 +38,7 @@ public interface CarmenService {
 
     @POST("/iniciarJuego")
     Call<Game> startGame();
+
+    @POST("/viajar")
+    Call<Game> travel(@Body TravelCountry destination);
 }

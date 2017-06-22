@@ -17,7 +17,8 @@
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Viajar"/>
+        android:text="@string/viajar"
+        android:onClick="buttonTravelOnClick"/>
 
     <TextView
         android:layout_width="wrap_content"
