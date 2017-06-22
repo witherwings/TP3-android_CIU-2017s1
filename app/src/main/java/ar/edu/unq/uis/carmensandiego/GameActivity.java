@@ -39,25 +39,6 @@ public class GameActivity extends AppCompatActivity {
     }
 
     private void populateConnectionsSpinner() {
-//        final GameActivity that = this;
-//        service.getPaises(new Callback<List<Pais>>() {
-//
-//            @Override
-//            public void success(List<Pais> paises, Response response) {
-//                List<String> paisesNombre = new ArrayList<String>();
-//                for (Pais p : paises) {
-//                    // TODO: agregar un if para solo meter las conexiones con el pais actual
-//                    paisesNombre.add(p.getName());
-//                }
-//                populateSpinner(R.id.spinnerConnections, new ArrayAdapter(that, android.R.layout.simple_spinner_item, paisesNombre));
-//            }
-//
-//            @Override
-//            public void failure(RetrofitError error) {
-//                // TODO: mostrar algo lindo
-//            }
-//        });
-
         final GameActivity that = this;
 
         service.getPaises().enqueue(new Callback<List<Pais>>() {
@@ -73,29 +54,29 @@ public class GameActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<List<Pais>> call, Throwable t) {
-
+                // TODO: manejar error
             }
         });
     }
 
     private void populateVillainsSpinner() {
-//        final GameActivity that = this;
-//        service.getVillanos(new Callback<List<Villano>>() {
-//
-//            @Override
-//            public void success(List<Villano> villanos, Response response) {
-//                List<String> villanosNombre = new ArrayList<String>();
-//                for (Villano v : villanos) {
-//                    villanosNombre.add(v.getName());
-//                }
-//                populateSpinner(R.id.spinnerVillains, new ArrayAdapter(that, android.R.layout.simple_spinner_item, villanosNombre));
-//            }
-//
-//            @Override
-//            public void failure(RetrofitError error) {
-//                // TODO: mostrar algo lindo
-//            }
-//        });
+        final GameActivity that = this;
+
+        service.getVillanos().enqueue(new Callback<List<Pais>>() {
+            @Override
+            public void onResponse(Call<List<Pais>> call, Response<List<Pais>> response) {
+                List<String> paisesNombre = new ArrayList<String>();
+                for (Pais p : response.body()) {
+                    paisesNombre.add(p.getName());
+                }
+                populateSpinner(R.id.spinnerVillains, new ArrayAdapter(that, android.R.layout.simple_spinner_item, paisesNombre));
+            }
+
+            @Override
+            public void onFailure(Call<List<Pais>> call, Throwable t) {
+                // TODO: manejar error
+            }
+        });
     }
 
     private void populateSpinner(int spinnerId, ArrayAdapter adapter) {
