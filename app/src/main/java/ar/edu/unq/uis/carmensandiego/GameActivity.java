@@ -49,8 +49,7 @@ public class GameActivity extends AppCompatActivity {
         service.startGame().enqueue(new Callback<Game>() {
             @Override
             public void onResponse(Call<Game> call, Response<Game> response) {
-                that.game = response.body();
-                that.setTitle("Estas en: " + that.game.getPais().getName() + "!");
+                updateGameAndTitle(response, that);
             }
 
             @Override
@@ -177,8 +176,7 @@ public class GameActivity extends AppCompatActivity {
         service.travel(destination).enqueue(new Callback<Game>() {
             @Override
             public void onResponse(Call<Game> call, Response<Game> response) {
-                that.game = response.body();
-                that.setTitle("Estas en: " + that.game.getPais().getName() + "!");
+                updateGameAndTitle(response, that);
                 populateConnectionsSpinner();
             }
 
@@ -187,5 +185,18 @@ public class GameActivity extends AppCompatActivity {
                 // TODO: mostrar algo lindo
             }
         });
+    }
+
+    /**
+     * actualiza el juego y el titulo con la respuesta del servidor y la activity
+     * sender es importante que se use la parametrizada y no this porque en el
+     * contexto que se va a ejecutar este metodo, this puede significar otra cosa
+     * (asincronico)
+     * @param response respuesta proporcionada por el servidor
+     * @param that activity sender (reemplaza this dentro de esta funcion)
+     */
+    private void updateGameAndTitle(Response<Game> response, GameActivity that) {
+        that.game = response.body();
+        that.setTitle("Estas en: " + that.game.getPais().getName() + "!");
     }
 }
