@@ -25,13 +25,12 @@ import retrofit2.Response;
 public class GameActivity extends AppCompatActivity {
 
     private CarmenService service;
-    private Game game;
+    public Game game;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.layout_arrest_order);
-        setTitle("Estas en: Egipto!");
 
         service = ServiceConnection.CreateService();
 
@@ -46,6 +45,7 @@ public class GameActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<Game> call, Response<Game> response) {
                 that.game = response.body();
+                that.setTitle("Estas en: " + that.game.getPais().getName() + "!");
             }
 
             @Override

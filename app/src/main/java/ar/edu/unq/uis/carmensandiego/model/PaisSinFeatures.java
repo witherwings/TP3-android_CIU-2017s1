@@ -6,7 +6,7 @@ import java.util.List;
  * Created by lucasf on 6/21/17.
  */
 
-class PaisSinFeatures {
+public class PaisSinFeatures {
 
     int id;
     String name;
