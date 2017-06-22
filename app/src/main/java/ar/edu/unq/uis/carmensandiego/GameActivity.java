@@ -37,8 +37,6 @@ public class GameActivity extends AppCompatActivity {
     }
 
     private void populateConnectionsSpinner() {
-//        populateSpinner(R.id.spinnerConnections, ArrayAdapter.createFromResource(this,
-//                R.array.connections_array, android.R.layout.simple_spinner_item));
         final GameActivity that = this;
         service.getPaises(new Callback<List<Pais>>() {
 
@@ -46,6 +44,7 @@ public class GameActivity extends AppCompatActivity {
             public void success(List<Pais> paises, Response response) {
                 List<String> paisesNombre = new ArrayList<String>();
                 for (Pais p : paises) {
+                    // TODO: agregar un if para solo meter las conexiones con el pais actual
                     paisesNombre.add(p.getName());
                 }
                 populateSpinner(R.id.spinnerConnections, new ArrayAdapter(that, android.R.layout.simple_spinner_item, paisesNombre));
