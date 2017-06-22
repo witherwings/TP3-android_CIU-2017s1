@@ -9,6 +9,7 @@ import android.view.Window;
 import android.widget.ArrayAdapter;
 import android.widget.ListAdapter;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -49,7 +50,7 @@ public class GameActivity extends AppCompatActivity {
         service.startGame().enqueue(new Callback<Game>() {
             @Override
             public void onResponse(Call<Game> call, Response<Game> response) {
-                updateGameAndTitle(response, that);
+                updateGameAndTitle(response);
             }
 
             @Override
@@ -176,7 +177,8 @@ public class GameActivity extends AppCompatActivity {
         service.travel(destination).enqueue(new Callback<Game>() {
             @Override
             public void onResponse(Call<Game> call, Response<Game> response) {
-                updateGameAndTitle(response, that);
+                updateGameAndTitle(response);
+                updateVisitedCountries();
                 populateConnectionsSpinner();
             }
 
@@ -188,15 +190,29 @@ public class GameActivity extends AppCompatActivity {
     }
 
     /**
-     * actualiza el juego y el titulo con la respuesta del servidor y la activity
-     * sender es importante que se use la parametrizada y no this porque en el
-     * contexto que se va a ejecutar este metodo, this puede significar otra cosa
-     * (asincronico)
-     * @param response respuesta proporcionada por el servidor
-     * @param that activity sender (reemplaza this dentro de esta funcion)
+     * actualiza la lista de paises recorridos (textViewVisitedCountries)
      */
-    private void updateGameAndTitle(Response<Game> response, GameActivity that) {
-        that.game = response.body();
-        that.setTitle("Estas en: " + that.game.getPais().getName() + "!");
+    private void updateVisitedCountries() {
+        String text = "";
+
+        for (String visited : game.getPaisesVisitados()) {
+            if (text.equals("")) {
+                text = text + " " + visited;
+            }
+            else {
+                text = text + " -> " + visited;
+            }
+        }
+
+        ((TextView) findViewById(R.id.textViewVisitedCountries)).setText(text);
+    }
+
+    /**
+     * actualiza el juego y el titulo con la respuesta del servidor
+     * @param response respuesta proporcionada por el servidor
+     */
+    private void updateGameAndTitle(Response<Game> response) {
+        game = response.body();
+        setTitle("Estas en: " + game.getPais().getName() + "!");
     }
 }
