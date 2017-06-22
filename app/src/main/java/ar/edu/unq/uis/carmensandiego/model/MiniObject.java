@@ -4,7 +4,7 @@ package ar.edu.unq.uis.carmensandiego.model;
  * Created by lucasf on 6/21/17.
  */
 
-class MiniObject {
+public class MiniObject {
 
     int id;
     String name;

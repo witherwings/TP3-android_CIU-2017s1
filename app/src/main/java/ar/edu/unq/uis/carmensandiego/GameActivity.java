@@ -16,6 +16,7 @@ import java.util.List;
 import ar.edu.unq.uis.carmensandiego.httpService.CarmenService;
 import ar.edu.unq.uis.carmensandiego.httpService.ServiceConnection;
 import ar.edu.unq.uis.carmensandiego.model.Game;
+import ar.edu.unq.uis.carmensandiego.model.MiniObject;
 import ar.edu.unq.uis.carmensandiego.model.Pais;
 import ar.edu.unq.uis.carmensandiego.model.Villano;
 import retrofit2.Call;
@@ -87,7 +88,13 @@ public class GameActivity extends AppCompatActivity {
      * @return dice si p esta conectado a game.getPais()
      */
     private boolean isCountryConnected(Pais p) {
-        return game.getPais().getConnectedCountries().contains(p);
+        boolean ret = false;
+
+        for (MiniObject mo : game.getPais().getConnectedCountries()) {
+            ret = ret || p.getName().equals(mo.getName());
+        }
+
+        return ret;
     }
 
     /**
