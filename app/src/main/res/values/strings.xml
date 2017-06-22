@@ -11,16 +11,4 @@
     <string name="pedir_pista">Pedir pista</string>
     <string name="destinos_recorridos">Destinos recorridos</string>
     <string name="emitir_orden">Emitir orden</string>
-
-    <string-array name="villains_array">
-        <item>Carmen San Diego</item>
-        <item>Igor Igorvich</item>
-        <item>Vic La Mancha</item>
-    </string-array>
-
-    <string-array name="connections_array">
-        <item>Alemania</item>
-        <item>Espania</item>
-        <item>Italia</item>
-    </string-array>
 </resources>
