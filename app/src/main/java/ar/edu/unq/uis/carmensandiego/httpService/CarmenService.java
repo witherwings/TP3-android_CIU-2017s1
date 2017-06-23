@@ -2,6 +2,7 @@ package ar.edu.unq.uis.carmensandiego.httpService;
 
 import java.util.List;
 
+import ar.edu.unq.uis.carmensandiego.model.Clue;
 import ar.edu.unq.uis.carmensandiego.model.Game;
 import ar.edu.unq.uis.carmensandiego.model.Pais;
 import ar.edu.unq.uis.carmensandiego.model.TravelCountry;
@@ -41,4 +42,8 @@ public interface CarmenService {
 
     @POST("/viajar")
     Call<Game> travel(@Body TravelCountry destination);
+
+    /* Pista */
+    @GET("/pistaDelLugar")
+    Call<Clue> getClue(@retrofit2.http.Query("place") String place, @retrofit2.http.Query("caseID") int id);
 }

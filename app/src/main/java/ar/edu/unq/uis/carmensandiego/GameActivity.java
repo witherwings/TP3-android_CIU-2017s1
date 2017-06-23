@@ -1,12 +1,16 @@
 package ar.edu.unq.uis.carmensandiego;
 
+import android.opengl.EGLExt;
 import android.support.annotation.ArrayRes;
+import android.support.annotation.IdRes;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -16,6 +20,7 @@ import java.util.List;
 
 import ar.edu.unq.uis.carmensandiego.httpService.CarmenService;
 import ar.edu.unq.uis.carmensandiego.httpService.ServiceConnection;
+import ar.edu.unq.uis.carmensandiego.model.Clue;
 import ar.edu.unq.uis.carmensandiego.model.Game;
 import ar.edu.unq.uis.carmensandiego.model.MiniObject;
 import ar.edu.unq.uis.carmensandiego.model.Pais;
@@ -39,6 +44,14 @@ public class GameActivity extends AppCompatActivity {
 
         populateVillainsSpinner();
         startGame();
+
+        setPlacesAndClues();
+    }
+
+    private void setPlacesAndClues() {
+        final GameActivity that = this;
+
+
     }
 
     /**
@@ -147,6 +160,16 @@ public class GameActivity extends AppCompatActivity {
      */
     public void buttonPedirPistaOnLick(View view) {
         setContentView(R.layout.layout_clue);
+        setPlaces();
+    }
+
+    private void setPlaces() {
+        String firstPlace = this.game.getPais().getPlaces().get(0);
+        ((Button) findViewById(R.id.firstPlace)).setText(firstPlace);
+        String secondPlace = this.game.getPais().getPlaces().get(1);
+        ((Button) findViewById(R.id.secondPlace)).setText(secondPlace);
+        String thirdPlace = this.game.getPais().getPlaces().get(2);
+        ((Button) findViewById(R.id.thirdPlace)).setText(thirdPlace);
     }
 
     /**
@@ -214,5 +237,45 @@ public class GameActivity extends AppCompatActivity {
     private void updateGameAndTitle(Response<Game> response) {
         game = response.body();
         setTitle("Estas en: " + game.getPais().getName() + "!");
+    }
+
+    public void buttonPlaceClueOnClick(View view) {
+        switch (view.getId()){
+            case R.id.firstPlace:
+                showCurrentPlace(R.id.firstPlace);
+                showClue(R.id.firstPlace, game.getId());
+                break;
+            case R.id.secondPlace:
+                showCurrentPlace(R.id.secondPlace);
+                showClue(R.id.secondPlace, game.getId());
+                break;
+            case R.id.thirdPlace:
+                showCurrentPlace(R.id.thirdPlace);
+                showClue(R.id.thirdPlace, game.getId());
+                break;
+        }
+    }
+
+    private void showCurrentPlace(@IdRes int firstPlace) {
+        String currentPlace = ((Button) findViewById(firstPlace)).getText().toString();
+
+        ((TextView) findViewById(R.id.currentPlace)).setText(currentPlace);
+    }
+
+    public void showClue(@IdRes int buttonID, int caseId){
+        String currentPlace = ((Button) findViewById(buttonID)).getText().toString();
+        service.getClue(currentPlace, caseId).enqueue(new Callback<Clue>() {
+            @Override
+            public void onResponse(Call<Clue> call, Response<Clue> response) {
+                String pista = response.body().getPista();
+                ((TextView) findViewById(R.id.showClue)).setText(pista);
+            }
+
+            @Override
+            public void onFailure(Call<Clue> call, Throwable t) {
+                // TODO: mostrar algo lindo
+            }
+        });
+
     }
 }
