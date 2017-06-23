@@ -239,6 +239,11 @@ public class GameActivity extends AppCompatActivity {
         setTitle("Estas en: " + game.getPais().getName() + "!");
     }
 
+    /**
+     * implementacion del boton el cual muestra de acuerdo
+     * a que lugar su respectiva pista
+     * */
+
     public void buttonPlaceClueOnClick(View view) {
         switch (view.getId()){
             case R.id.firstPlace:
