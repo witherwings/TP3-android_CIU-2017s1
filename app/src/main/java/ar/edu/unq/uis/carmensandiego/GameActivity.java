@@ -44,14 +44,6 @@ public class GameActivity extends AppCompatActivity {
 
         populateVillainsSpinner();
         startGame();
-
-        setPlacesAndClues();
-    }
-
-    private void setPlacesAndClues() {
-        final GameActivity that = this;
-
-
     }
 
     /**
@@ -164,11 +156,11 @@ public class GameActivity extends AppCompatActivity {
     }
 
     private void setPlaces() {
-        String firstPlace = this.game.getPais().getPlaces().get(0);
+        String firstPlace = game.getPais().getPlaces().get(0);
         ((Button) findViewById(R.id.firstPlace)).setText(firstPlace);
-        String secondPlace = this.game.getPais().getPlaces().get(1);
+        String secondPlace = game.getPais().getPlaces().get(1);
         ((Button) findViewById(R.id.secondPlace)).setText(secondPlace);
-        String thirdPlace = this.game.getPais().getPlaces().get(2);
+        String thirdPlace = game.getPais().getPlaces().get(2);
         ((Button) findViewById(R.id.thirdPlace)).setText(thirdPlace);
     }
 

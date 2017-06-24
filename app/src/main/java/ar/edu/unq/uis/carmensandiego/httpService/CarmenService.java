@@ -43,7 +43,6 @@ public interface CarmenService {
     @POST("/viajar")
     Call<Game> travel(@Body TravelCountry destination);
 
-    /* Pista */
     @GET("/pistaDelLugar")
     Call<Clue> getClue(@retrofit2.http.Query("place") String place, @retrofit2.http.Query("caseID") int id);
 }
