@@ -1,17 +1,11 @@
 package ar.edu.unq.uis.carmensandiego;
 
-import android.opengl.EGLExt;
-import android.support.annotation.ArrayRes;
 import android.support.annotation.IdRes;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
-import android.view.Window;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ListAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -26,6 +20,8 @@ import ar.edu.unq.uis.carmensandiego.model.MiniObject;
 import ar.edu.unq.uis.carmensandiego.model.Pais;
 import ar.edu.unq.uis.carmensandiego.model.TravelCountry;
 import ar.edu.unq.uis.carmensandiego.model.Villano;
+import ar.edu.unq.uis.carmensandiego.model.Warrant;
+import ar.edu.unq.uis.carmensandiego.model.WarrantCheck;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -34,6 +30,8 @@ public class GameActivity extends AppCompatActivity {
 
     private CarmenService service;
     public Game game;
+    public List<Villano> allVillains;
+    public Villano suspect = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,6 +59,18 @@ public class GameActivity extends AppCompatActivity {
             @Override
             public void onFailure(Call<Game> call, Throwable t) {
                 // TODO: manejar error
+            }
+        });
+
+        service.getVillanos().enqueue(new Callback<List<Villano>>() {
+            @Override
+            public void onResponse(Call<List<Villano>> call, Response<List<Villano>> response) {
+                updateVillains(response);
+            }
+
+            @Override
+            public void onFailure(Call<List<Villano>> call, Throwable t) {
+                //TODO: handle
             }
         });
     }
@@ -110,18 +120,18 @@ public class GameActivity extends AppCompatActivity {
     private void populateVillainsSpinner() {
         final GameActivity that = this;
 
-        service.getVillanos().enqueue(new Callback<List<Pais>>() {
+        service.getVillanos().enqueue(new Callback<List<Villano>>() {
             @Override
-            public void onResponse(Call<List<Pais>> call, Response<List<Pais>> response) {
-                List<String> paisesNombre = new ArrayList<String>();
-                for (Pais p : response.body()) {
-                    paisesNombre.add(p.getName());
+            public void onResponse(Call<List<Villano>> call, Response<List<Villano>> response) {
+                List<String> villanosNombre = new ArrayList<String>();
+                for (Villano v : response.body()) {
+                    villanosNombre.add(v.getName());
                 }
-                populateSpinner(R.id.spinnerVillains, new ArrayAdapter(that, android.R.layout.simple_spinner_item, paisesNombre));
+                populateSpinner(R.id.spinnerVillains, new ArrayAdapter(that, android.R.layout.simple_spinner_item, villanosNombre));
             }
 
             @Override
-            public void onFailure(Call<List<Pais>> call, Throwable t) {
+            public void onFailure(Call<List<Villano>> call, Throwable t) {
                 // TODO: manejar error
             }
         });
@@ -204,6 +214,44 @@ public class GameActivity extends AppCompatActivity {
         });
     }
 
+    public void buttonWarrantOnClick(View view){
+        final Spinner spinner = (Spinner) findViewById(R.id.spinnerVillains);
+        int suspectId = 0;
+
+        for (Villano v : allVillains) {
+            if (spinner.getSelectedItem().equals(v.getName())) {
+                suspectId = v.getId();
+                break;
+            }
+        }
+        Warrant orden = new Warrant(suspectId, game.getId());
+
+        final GameActivity that = this;
+        service.createWarrantTo(orden).enqueue(new Callback<String>() {
+            @Override
+            public void onResponse(Call<String> call, Response<String> response) {
+                Villano selected = null;
+                for (Villano v : allVillains) {
+                    if (spinner.getSelectedItem().equals(v.getName())) {
+                        selected = v;
+                        break;
+                    }
+                }
+                updateSuspect(selected);
+                updateSuspectTextView();
+            }
+
+            @Override
+            public void onFailure(Call<String> call, Throwable t) {
+                // TODO: mostrar algo lindo
+            }
+        });
+    }
+
+    private void updateSuspectTextView() {
+        ((TextView) findViewById(R.id.textViewSuspect)).setText(suspect.getName());
+    }
+
     /**
      * actualiza la lista de paises recorridos (textViewVisitedCountries)
      */
@@ -231,6 +279,14 @@ public class GameActivity extends AppCompatActivity {
         setTitle("Estas en: " + game.getPais().getName() + "!");
     }
 
+    private void updateVillains(Response<List<Villano>> response) {
+        allVillains = response.body();
+    }
+
+    private void updateSuspect(Villano v) {
+        suspect = v;
+    }
+
     /**
      * implementacion del boton el cual muestra de acuerdo
      * a que lugar su respectiva pista
@@ -253,8 +309,8 @@ public class GameActivity extends AppCompatActivity {
         }
     }
 
-    private void showCurrentPlace(@IdRes int firstPlace) {
-        String currentPlace = ((Button) findViewById(firstPlace)).getText().toString();
+    private void showCurrentPlace(@IdRes int place) {
+        String currentPlace = ((Button) findViewById(place)).getText().toString();
 
         ((TextView) findViewById(R.id.currentPlace)).setText(currentPlace);
     }
@@ -266,6 +322,29 @@ public class GameActivity extends AppCompatActivity {
             public void onResponse(Call<Clue> call, Response<Clue> response) {
                 String pista = response.body().getPista();
                 ((TextView) findViewById(R.id.showClue)).setText(pista);
+
+                if(pista.contains("ALTO!! Detengase: ")){
+                    if(suspect != null){
+                    service.checkWarrant(suspect.getId()).enqueue(new Callback<WarrantCheck>() {
+                        @Override
+                        public void onResponse(Call<WarrantCheck> call, Response<WarrantCheck> response) {
+                            if(response.body().getChequeo()){
+                                ((TextView) findViewById(R.id.endgameMessage)).setText("Enhorabuena! Has logrado atrapar al responsable del robo. Felicitaciones!");
+                            }
+                            else{
+                                ((TextView) findViewById(R.id.endgameMessage)).setText("Malas Noticias! Tu Orden de Arresto no concordaba con el responsable del robo. Lamentablemente, el hecho quedara inpune.");
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Call<WarrantCheck> call, Throwable t) {
+                            // TODO: mostrar algo lindo
+                        }
+                    });}
+                    else{
+                        ((TextView) findViewById(R.id.endgameMessage)).setText("PERDISTE!. No generaste ninguna orden de arresto antes de atrapar al sospechoso.");
+                    }
+                }
             }
 
             @Override

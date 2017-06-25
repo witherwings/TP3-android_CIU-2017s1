@@ -10,7 +10,8 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class ServiceConnection {
 
     public static CarmenService CreateService() {
-        String IP = "192.168.1.108";
+        //String IP = "192.168.1.108";
+        String IP = "192.168.56.1";
         String API_URL = "http://"+ IP +":9000";
         //Retrofit restAdapter = new Retrofit.Builder().setEndpoint(API_URL).build();
         Retrofit restAdapter = new Retrofit.Builder()

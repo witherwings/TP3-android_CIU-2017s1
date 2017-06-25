@@ -31,7 +31,20 @@
         <Button
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/emitir_orden"/>
+            android:text="@string/emitir_orden"
+            android:onClick="buttonWarrantOnClick"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/orden_emitida_para"
+            android:textSize="20sp"/>
+
+        <TextView
+            android:id="@+id/textViewSuspect"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="30sp"/>
 
         <LinearLayout
             android:layout_width="match_parent"
