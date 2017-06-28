@@ -8,6 +8,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,6 +19,7 @@ import ar.edu.unq.uis.carmensandiego.model.Clue;
 import ar.edu.unq.uis.carmensandiego.model.Game;
 import ar.edu.unq.uis.carmensandiego.model.MiniObject;
 import ar.edu.unq.uis.carmensandiego.model.Pais;
+import ar.edu.unq.uis.carmensandiego.model.PaisSinFeatures;
 import ar.edu.unq.uis.carmensandiego.model.TravelCountry;
 import ar.edu.unq.uis.carmensandiego.model.Villano;
 import ar.edu.unq.uis.carmensandiego.model.Warrant;
@@ -31,6 +33,7 @@ public class GameActivity extends AppCompatActivity {
     private CarmenService service;
     public Game game;
     public List<Villano> allVillains;
+    public List<Pais> paises;
     public Villano suspect = null;
 
     @Override
@@ -59,6 +62,7 @@ public class GameActivity extends AppCompatActivity {
             @Override
             public void onFailure(Call<Game> call, Throwable t) {
                 // TODO: manejar error
+                Toast.makeText(getApplicationContext(), "Ha ocurrido un error", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -71,6 +75,20 @@ public class GameActivity extends AppCompatActivity {
             @Override
             public void onFailure(Call<List<Villano>> call, Throwable t) {
                 //TODO: handle
+                Toast.makeText(getApplicationContext(), "Ha ocurrido un error", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        service.getPaises().enqueue(new Callback<List<Pais>>() {
+            @Override
+            public void onResponse(Call<List<Pais>> call, Response<List<Pais>> response) {
+                updatePaises(response);
+            }
+
+            @Override
+            public void onFailure(Call<List<Pais>> call, Throwable t) {
+                //TODO: handle
+                Toast.makeText(getApplicationContext(), "Ha ocurrido un error", Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -96,6 +114,7 @@ public class GameActivity extends AppCompatActivity {
             @Override
             public void onFailure(Call<List<Pais>> call, Throwable t) {
                 // TODO: manejar error
+                Toast.makeText(getApplicationContext(), "Ha ocurrido un error", Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -133,6 +152,7 @@ public class GameActivity extends AppCompatActivity {
             @Override
             public void onFailure(Call<List<Villano>> call, Throwable t) {
                 // TODO: manejar error
+                Toast.makeText(getApplicationContext(), "Ha ocurrido un error", Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -210,8 +230,41 @@ public class GameActivity extends AppCompatActivity {
             @Override
             public void onFailure(Call<Game> call, Throwable t) {
                 // TODO: mostrar algo lindo
+                Toast.makeText(getApplicationContext(), "Ha ocurrido un error", Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    public void buttonGetBackOnClick(View view) {
+
+        int destinationId = 0;
+        String lastCountry = game.getPaisesVisitados().get(game.getPaisesVisitados().size()-1);
+
+        for (Pais p : paises) {
+            if (lastCountry.equals(p.getName())) {
+                destinationId = p.getId();
+                break;
+            }
+        }
+
+        TravelCountry destination = new TravelCountry(destinationId, game.getId());
+        ((TextView) findViewById(R.id.textViewFailedCountries)).setText(game.getPais().getName());
+
+        service.travel(destination).enqueue(new Callback<Game>() {
+            @Override
+            public void onResponse(Call<Game> call, Response<Game> response) {
+                updateGameAndTitle(response);
+                populateConnectionsSpinner();
+            }
+
+            @Override
+            public void onFailure(Call<Game> call, Throwable t) {
+                // TODO: mostrar algo lindo
+                Toast.makeText(getApplicationContext(), "Ha ocurrido un error", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+
     }
 
     public void buttonWarrantOnClick(View view){
@@ -244,6 +297,7 @@ public class GameActivity extends AppCompatActivity {
             @Override
             public void onFailure(Call<String> call, Throwable t) {
                 // TODO: mostrar algo lindo
+                Toast.makeText(getApplicationContext(), "Ha ocurrido un error", Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -281,6 +335,10 @@ public class GameActivity extends AppCompatActivity {
 
     private void updateVillains(Response<List<Villano>> response) {
         allVillains = response.body();
+    }
+
+    private void updatePaises(Response<List<Pais>> response) {
+        paises = response.body();
     }
 
     private void updateSuspect(Villano v) {
@@ -339,6 +397,7 @@ public class GameActivity extends AppCompatActivity {
                         @Override
                         public void onFailure(Call<WarrantCheck> call, Throwable t) {
                             // TODO: mostrar algo lindo
+                            Toast.makeText(getApplicationContext(), "Ha ocurrido un error", Toast.LENGTH_SHORT).show();
                         }
                     });}
                     else{
@@ -350,6 +409,7 @@ public class GameActivity extends AppCompatActivity {
             @Override
             public void onFailure(Call<Clue> call, Throwable t) {
                 // TODO: mostrar algo lindo
+                Toast.makeText(getApplicationContext(), "Ha ocurrido un error", Toast.LENGTH_SHORT).show();
             }
         });
 

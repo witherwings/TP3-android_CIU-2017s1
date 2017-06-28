@@ -8,8 +8,10 @@
     <string name="orden_de_arresto">Orden de arresto</string>
     <string name="orden_de_arresto_contra">Orden de arresto contra:</string>
     <string name="viajar">Viajar</string>
+    <string name="volver">Volver</string>
     <string name="pedir_pista">Pedir pista</string>
     <string name="destinos_recorridos">Destinos recorridos</string>
+    <string name="destinos_fallidos">Destinos fallidos</string>
     <string name="emitir_orden">Emitir orden</string>
     <string name="orden_emitida_para">Orden emitida a:</string>
 </resources>
